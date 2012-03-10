@@ -19,7 +19,8 @@ public class MBWorldReward {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if ((_plugin.permissions != null && _plugin.permissions.has((Player)sender, "mobbounty.commands.mbwr")) || (_plugin.permissions == null && sender.isOp())) {
+        Player player = (Player) sender;
+		if (player.hasPermission("mobbounty.commands.mbwr")) {
 			if (args.length == 3) {
 				if (args[2].matches("[-]?[0-9]+([.][0-9]+)?")) {
 					World world = _plugin.getServer().getWorld(args[0]);

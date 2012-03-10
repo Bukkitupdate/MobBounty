@@ -14,7 +14,8 @@ public class MBGeneral {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if ((_plugin.permissions != null && _plugin.permissions.has((Player)sender, "mobbounty.commands.mbg")) || (_plugin.permissions == null && sender.isOp())) {
+        Player player = (Player) sender;
+		if ((player.hasPermission("mobbounty.commands.mbg"))) {
 			if (args.length == 2) {
 				if (args[0].equalsIgnoreCase("locale")) {
 					_plugin.getConfigManager().setProperty(MobBountyConfFile.GENERAL, "locale", args[1].toLowerCase());

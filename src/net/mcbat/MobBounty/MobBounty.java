@@ -6,8 +6,6 @@ import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.nijiko.permissions.PermissionHandler;
 import net.mcbat.Register.payment.Method;
 
 public class MobBounty extends JavaPlugin {
@@ -17,7 +15,7 @@ public class MobBounty extends JavaPlugin {
 	private MobBountyCommands _commandManager;
 	private MobBountyLocale _localeManger;
 
-	public PermissionHandler permissions = null;
+
 	public Method method = null;
 
 	@Override

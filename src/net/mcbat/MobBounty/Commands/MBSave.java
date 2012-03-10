@@ -12,7 +12,8 @@ public class MBSave {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if ((_plugin.permissions != null && _plugin.permissions.has((Player)sender, "mobbounty.commands.mbs")) || (_plugin.permissions == null && sender.isOp())) {
+        Player player = (Player) sender;
+		if ((player.hasPermission("mobbounty.commands.mbs"))) {
 			_plugin.getConfigManager().saveConfig();
 			
 			String message = _plugin.getLocaleManager().getString("MBSSaved");

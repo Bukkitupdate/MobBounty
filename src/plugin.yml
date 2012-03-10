@@ -55,3 +55,34 @@ commands:
         aliases: [mbl]
         permission: MobBounty.Admin.mbl
         usage: /<command>
+permissions:
+    mobbounty.multipliers.environment:
+        default: OP
+    mobbounty.multipliers.time:
+        default: OP
+    mobbounty.multipliers.group:
+        default: OP
+    mobbounty.multipliers.world:
+        default: OP
+    mobbounty.collect:
+        default: OP
+    mobbounty.commands.mbem
+        default: OP
+    mobbounty.commands.mbg:
+        default: OP
+    mobbounty.commands.mbl
+        default: OP
+    mobbounty.commands.mbgm:
+        default: OP
+    mobbounty.commands.mbr:
+        default: OP
+    mobbounty.commands.mbs:
+        default: OP
+    mobbounty.commands.mbtm:
+        default: OP
+    mobbounty.commands.mbwm:
+        default: OP
+    mobbounty.commands.mbwr:
+        default: OP
+    mobbounty.commands.mb
+        default: OP

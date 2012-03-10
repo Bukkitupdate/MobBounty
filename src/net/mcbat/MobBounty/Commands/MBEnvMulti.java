@@ -14,7 +14,8 @@ public class MBEnvMulti {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if ((_plugin.permissions != null && _plugin.permissions.has((Player)sender, "mobbounty.commands.mbem")) || (_plugin.permissions == null && sender.isOp())) {
+        Player player = (Player) sender;
+		if (player.hasPermission("mobbounty.commands.mbem")) {
 			if (args.length == 2) {
 				if (args[1].matches("((-|\\+)?[0-9]+(\\.[0-9]+)?)+")) {
 					Double amount = Double.parseDouble(args[1]);

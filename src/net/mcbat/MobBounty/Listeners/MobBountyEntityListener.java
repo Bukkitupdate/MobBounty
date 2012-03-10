@@ -19,15 +19,15 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageByProjectileEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityListener;
 import org.bukkit.plugin.PluginManager;
 
-public class MobBountyEntityListener extends EntityListener {
+public class MobBountyEntityListener implements Listener {
 	private final MobBounty _plugin;
 	
 	private Map<String, MobBountyPlayerKillData> _playerData;
@@ -43,14 +43,14 @@ public class MobBountyEntityListener extends EntityListener {
 	public void registerEvents() {
 		PluginManager pm = _plugin.getServer().getPluginManager();
 
-		pm.registerEvent(Event.Type.ENTITY_DAMAGE, this, Priority.Monitor, _plugin);
-		pm.registerEvent(Event.Type.ENTITY_DEATH, this, Priority.Monitor, _plugin);
+		pm.registerEvents(this, _plugin);
 	}
 	
 	public void onPlayerQuit(String name) {
 		_playerData.remove(name);
 	}
 	
+    @EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (_plugin.method == null || event.isCancelled())
 			return;
@@ -71,25 +71,26 @@ public class MobBountyEntityListener extends EntityListener {
 				if (subevent.getDamager() instanceof Player) {
 					Player damager = (Player) subevent.getDamager();
 
-					if ((_plugin.permissions != null && _plugin.permissions.has(damager, "mobbounty.collect")) || (_plugin.permissions == null)) {
+					if ((damager.hasPermission("mobbounty.collect"))) {
 						if (_deathNote.get(entity) == null)
 							_deathNote.put(entity, damager);
 					}
 				}
 			}
-			else if (event instanceof EntityDamageByProjectileEvent) {
-				EntityDamageByProjectileEvent subevent = (EntityDamageByProjectileEvent)event;
-
-				if (subevent.getDamager() instanceof Player) {
-					Player damager = (Player) subevent.getDamager();
-					
-					if (_deathNote.get(entity) == null)
-						_deathNote.put(entity, damager);
-				}
-			}
+            //TODO: Fix whatever this is; EntityDamageByProjectileEvent doesn't exist anymore
+//			else if (event instanceof EntityDamageByProjectileEvent) {
+//				EntityDamageByProjectileEvent subevent = (EntityDamageByProjectileEvent)event;
+//
+//				if (subevent.getDamager() instanceof Player) {
+//					Player damager = (Player) subevent.getDamager();
+//
+//					if (_deathNote.get(entity) == null)
+//						_deathNote.put(entity, damager);
+//				}
+//			}
 		}
 	}
-	
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDeath(EntityDeathEvent event) {
 		if (_plugin.method == null)
 			return;
@@ -118,7 +119,7 @@ public class MobBountyEntityListener extends EntityListener {
 					}
 				}
 				
-				if ((_plugin.permissions != null && _plugin.permissions.has(player, "mobbounty.multipliers.environment")) || (_plugin.permissions == null)) {
+				if ((player.hasPermission("mobbounty.multipliers.environment"))) {
 					booleanTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.GENERAL, "useEnvironmentMultiplier");
 					if (booleanTest != null && (booleanTest.equalsIgnoreCase("true") || booleanTest.equalsIgnoreCase("yes") || booleanTest.equalsIgnoreCase("1"))) {
 						String wrldEnv = (world.getEnvironment() == Environment.NORMAL)?"Normal":"Nether";
@@ -129,7 +130,7 @@ public class MobBountyEntityListener extends EntityListener {
 					}
 				}
 
-				if ((_plugin.permissions != null && _plugin.permissions.has(player, "mobbounty.multipliers.time")) || (_plugin.permissions == null)) {
+				if ((player.hasPermission("mobbounty.multipliers.time"))) {
 					booleanTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.GENERAL, "useTimeMultiplier");
 					if (booleanTest != null && (booleanTest.equalsIgnoreCase("true") || booleanTest.equalsIgnoreCase("yes") || booleanTest.equalsIgnoreCase("1"))) {
 						String timeTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.MULTIPLIERS, "Time."+MobBountyTime.getTimeOfDay(world.getTime()).getName());
@@ -139,17 +140,19 @@ public class MobBountyEntityListener extends EntityListener {
 					}
 				}
 
-				if ((_plugin.permissions != null && _plugin.permissions.has(player, "mobbounty.multipliers.group"))) {
-					booleanTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.GENERAL, "useGroupMultiplier");
-					if (booleanTest != null && (booleanTest.equalsIgnoreCase("true") || booleanTest.equalsIgnoreCase("yes") || booleanTest.equalsIgnoreCase("1"))) {
-						String grpTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.MULTIPLIERS, "Groups."+world.getName()+"."+_plugin.permissions.getGroup(world.getName(), player.getName()));
-
-						if (grpTest != null)
-							multiplier *= Double.valueOf(grpTest);
-					}
-				}
+                /*
+				 * if ((player.hasPermission("mobbounty.multipliers.group"))) {
+				 *	booleanTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.GENERAL, "useGroupMultiplier");
+				 *	if (booleanTest != null && (booleanTest.equalsIgnoreCase("true") || booleanTest.equalsIgnoreCase("yes") || booleanTest.equalsIgnoreCase("1"))) {
+				 *		String grpTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.MULTIPLIERS, "Groups."+world.getName()+"."+_plugin.permissions.getGroup(world.getName(), player.getName()));
+                 *
+				 *		if (grpTest != null)
+				 *			multiplier *= Double.valueOf(grpTest);
+				 *	}
+			 	 * }
+				*/
 				
-				if ((_plugin.permissions != null && _plugin.permissions.has(player, "mobbounty.multipliers.world")) || (_plugin.permissions == null)) {
+				if ((player.hasPermission("mobbounty.multipliers.world"))) {
 					booleanTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.GENERAL, "useWorldMultiplier");
 					if (booleanTest != null && (booleanTest.equalsIgnoreCase("true") || booleanTest.equalsIgnoreCase("yes") || booleanTest.equalsIgnoreCase("1"))) {
 						String wrldTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.MULTIPLIERS, "Worlds."+world.getName());

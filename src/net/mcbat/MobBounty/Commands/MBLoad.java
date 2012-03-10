@@ -12,7 +12,8 @@ public class MBLoad {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if ((_plugin.permissions != null && _plugin.permissions.has((Player)sender, "mobbounty.commands.mbl")) || (_plugin.permissions == null && sender.isOp())) {
+        Player player = (Player) sender;
+		if (player.hasPermission("mobbounty.commands.mbl")) {
 			_plugin.getConfigManager().loadConfig();
 			
 			String message = _plugin.getLocaleManager().getString("MBLLoaded");

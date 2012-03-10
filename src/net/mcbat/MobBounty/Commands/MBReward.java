@@ -15,7 +15,8 @@ public class MBReward {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if ((_plugin.permissions != null && _plugin.permissions.has((Player)sender, "mobbounty.commands.mbr")) || (_plugin.permissions == null && sender.isOp())) {
+        Player player = (Player) sender;
+		if (player.hasPermission("mobbounty.commands.mbr")) {
 			if (args.length == 2) {
 				MobBountyCreature mob = MobBountyCreature.fromName(args[0]);
 

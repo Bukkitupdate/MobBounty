@@ -10,8 +10,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.nijiko.permissions.Group;
-
 public class MobBounty {
 	private final net.mcbat.MobBounty.MobBounty _plugin;
 	
@@ -20,13 +18,13 @@ public class MobBounty {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if ((_plugin.permissions != null && _plugin.permissions.has((Player)sender, "mobbounty.commands.mb")) || (_plugin.permissions == null)) {
-			Player player = (Player)sender;
+        Player player = (Player) sender;
+		if (player.hasPermission("mobbounty.commands.mb")) {
 			World world = player.getWorld();
 			double multiplier = 1.0;
 			String booleanTest = null;
 			
-			if ((_plugin.permissions != null && _plugin.permissions.has(player, "mobbounty.multipliers.environment")) || (_plugin.permissions == null)) {
+			if (player.hasPermission("mobbounty.multipliers.environment")) {
 				booleanTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.GENERAL, "useEnvironmentMultiplier");
 				if (booleanTest != null && (booleanTest.equalsIgnoreCase("true") || booleanTest.equalsIgnoreCase("yes") || booleanTest.equalsIgnoreCase("1"))) {
 					String wrldEnv = (world.getEnvironment() == Environment.NORMAL)?"Normal":"Nether";
@@ -37,7 +35,7 @@ public class MobBounty {
 				}
 			}
 
-			if ((_plugin.permissions != null && _plugin.permissions.has(player, "mobbounty.multipliers.time")) || (_plugin.permissions == null)) {
+			if (player.hasPermission("mobbounty.multipliers.time")) {
 				booleanTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.GENERAL, "useTimeMultiplier");
 				if (booleanTest != null && (booleanTest.equalsIgnoreCase("true") || booleanTest.equalsIgnoreCase("yes") || booleanTest.equalsIgnoreCase("1"))) {
 					String timeTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.MULTIPLIERS, "Time."+MobBountyTime.getTimeOfDay(world.getTime()).getName());
@@ -47,17 +45,17 @@ public class MobBounty {
 				}
 			}
 
-			if ((_plugin.permissions != null && _plugin.permissions.has(player, "mobbounty.multipliers.group"))) {
-				booleanTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.GENERAL, "useGroupMultiplier");
-				if (booleanTest != null && (booleanTest.equalsIgnoreCase("true") || booleanTest.equalsIgnoreCase("yes") || booleanTest.equalsIgnoreCase("1"))) {
-					String grpTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.MULTIPLIERS, "Groups."+world.getName()+"."+_plugin.permissions.getGroup(world.getName(), player.getName()));
-					
-					if (grpTest != null)
-						multiplier *= Double.valueOf(grpTest);
-				}
-			}
+//			if (player.hasPermission("mobbounty.multipliers.group"))) {
+//				booleanTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.GENERAL, "useGroupMultiplier");
+//				if (booleanTest != null && (booleanTest.equalsIgnoreCase("true") || booleanTest.equalsIgnoreCase("yes") || booleanTest.equalsIgnoreCase("1"))) {
+//					String grpTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.MULTIPLIERS, "Groups."+world.getName()+"."+_plugin.permissions.getGroup(world.getName(), player.getName()));
+//
+//					if (grpTest != null)
+//						multiplier *= Double.valueOf(grpTest);
+//				}
+//			}
 			
-			if ((_plugin.permissions != null && _plugin.permissions.has(player, "mobbounty.multipliers.world")) || (_plugin.permissions == null)) {
+			if (player.hasPermission("mobbounty.multipliers.world")) {
 				booleanTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.GENERAL, "useWorldMultiplier");
 				if (booleanTest != null && (booleanTest.equalsIgnoreCase("true") || booleanTest.equalsIgnoreCase("yes") || booleanTest.equalsIgnoreCase("1"))) {
 					String wrldTest = _plugin.getConfigManager().getProperty(MobBountyConfFile.MULTIPLIERS, "Worlds."+world.getName());
